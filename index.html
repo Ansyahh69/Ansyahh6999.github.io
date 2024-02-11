@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Ekonomi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>The Economic Odyssey</h1>
+        <button onclick="window.location.href='halaman2.html'">Start</button>
+        
+        <!-- Tombol baru untuk memutar musik -->
+        <button id="playMusicButton">Play Music</button>
+    </div>
+    <audio id="backgroundMusic" loop>
+        <source src="back.webm" type="audio/webm">
+        <source src="back.webm" type="audio/mpeg">
+        Browser Anda tidak mendukung tag audio.
+    </audio>
+    <script>
+        document.getElementById('playMusicButton').addEventListener('click', function() {
+            var music = document.getElementById('backgroundMusic');
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        });
+    </script>
+</body>
+</html>
