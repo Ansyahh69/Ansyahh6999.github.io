@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Selesai</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h2>Selamat, Anda telah menyelesaikan game ini!</h2>
+        <p id="finalScore">Total skor Anda: </p>
+        <!-- Tombol Go Back -->
+        <button id="goBackBtn">Go Back</button>
+    </div>
+    <script>
+        
+        const finalScore = localStorage.getItem("finalScore");
+        
+
+        document.getElementById("finalScore").innerText += `${finalScore}`;
+
+       
+        document.getElementById("goBackBtn").addEventListener("click", function() {
+            window.location.href = 'index.html'; 
+        });
+    </script>
+</body>
+</html>
