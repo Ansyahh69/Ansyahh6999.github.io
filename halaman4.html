@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Permainan Dimulai</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h2 id="question-title">The Economic Odyssey</h2>
+        <div id="question"></div>
+        <form id="choicesForm"></form>
+        <button id="submitBtn">Submit</button>
+        <button id="skipBtn">Skip</button>
+    </div>
+    <script>
+      let originalQuestions = [
+        
+        {
+        question: "Apa fungsi utama uang?",
+        choices: ["Dekorasi", "Alat tukar", "Mainan", "Alat musik"],
+        answer: "Alat tukar"
+    },
+    {
+        question: "Mata uang apa yang digunakan di Amerika Serikat?",
+        choices: ["Euro", "Yen", "Dolar", "Pound"],
+        answer: "Dolar"
+    },
+    {
+        question: "Apa nama mata uang Uni Eropa?",
+        choices: ["Euro", "Dolar", "Pound", "Yen"],
+        answer: "Euro"
+    },
+    {
+        question: "Negara mana yang menggunakan Dinar sebagai mata uangnya?",
+        choices: ["Bahrain", "Indonesia", "Jepang", "Amerika Serikat"],
+        answer: "Bahrain"
+    },
+    {
+        question: "Apa itu GDP per kapita?",
+        choices: ["Pendapatan per orang", "Total utang pemerintah", "Inflasi tahunan", "Ekspor bersih"],
+        answer: "Pendapatan per orang"
+    },
+    {
+        question: "Apa fungsi dari uang sebagai penyimpan nilai?",
+        choices: ["Menyimpan kekayaan", "Pembayaran pajak", "Dekorasi", "Media pertukaran"],
+        answer: "Menyimpan kekayaan"
+    },
+    
+    {
+        question: "Apa yang dimaksud dengan rating kredit?",
+        choices: ["Skor untuk video game", "Penilaian terhadap kelayakan kredit peminjam", "Sistem penilaian untuk film", "Rating untuk aplikasi seluler"],
+        answer: "Penilaian terhadap kelayakan kredit peminjam"
+    }, 
+    {
+    question: "Apa itu obligasi pemerintah?",
+    choices: ["Utang yang diterbitkan oleh perusahaan", "Investasi di pasar saham", "Utang yang diterbitkan oleh pemerintah", "Mata uang digital"],
+    answer: "Utang yang diterbitkan oleh pemerintah"
+    },
+{
+    question: "Negara manakah yang mata uangnya bernama Rand?",
+    choices: ["Namibia", "Botswana", "Afrika Selatan", "Zimbabwe"],
+    answer: "Afrika Selatan"
+},
+{
+    question: "Apa itu portofolio investasi?",
+    choices: ["Koleksi saham perusahaan", "Kumpulan investasi di berbagai instrumen keuangan", "Dokumen legal investasi", "Portofolio seni"],
+    answer: "Kumpulan investasi di berbagai instrumen keuangan"
+},
+{
+    question: "Apa itu utang publik?",
+    choices: ["Total utang pribadi warga negara", "Total utang pemerintah daerah", "Total utang pemerintah pusat dan daerah", "Utang luar negeri negara"],
+    answer: "Total utang pemerintah pusat dan daerah"
+},
+{
+    question: "Apa yang dimaksud dengan pasar primer?",
+    choices: ["Pasar tempat saham diperdagangkan pertama kali", "Pasar tempat membeli bahan primer", "Pasar untuk jual beli saham yang sudah ada", "Pasar untuk produk pertanian"],
+    answer: "Pasar tempat saham diperdagangkan pertama kali"
+},
+{
+    question: "Apa itu IPO?",
+    choices: ["Penjualan saham perusahaan kepada publik untuk pertama kalinya", "Investasi Pribadi Online", "Identifikasi Produk Online", "Instrumen Pembayaran Otomatis"],
+    answer: "Penjualan saham perusahaan kepada publik untuk pertama kalinya"
+},
+{
+    question: "Negara manakah yang menggunakan Shekel?",
+    choices: ["Mesir", "Libanon", "Yordania", "Israel"],
+    answer: "Israel"
+},
+{
+    question: "Apa itu bear market?",
+    choices: ["Pasar dengan tren naik", "Pasar dengan tren turun", "Pasar yang stabil", "Pasar hewan"],
+    answer: "Pasar dengan tren turun"
+},
+{
+    question: "Apa yang dimaksud dengan rating kredit?",
+    choices: ["Skor untuk video game", "Penilaian terhadap kelayakan kredit peminjam", "Sistem penilaian untuk film", "Rating untuk aplikasi seluler"],
+    answer: "Penilaian terhadap kelayakan kredit peminjam"
+},
+{
+    question: "Mata uang apa yang digunakan di China?",
+    choices: ["Renminbi", "Yen", "Won", "Dolar"],
+    answer: "Renminbi"
+},
+{
+    question: "Apa itu IPO?",
+    choices: ["International Purchase Offer", "Initial Public Offering", "Immediate Payment Order", "Internal Profit Organization"],
+    answer: "Initial Public Offering"
+},
+{
+    question: "Negara manakah yang menggunakan Shekel?",
+    choices: ["Iran", "Irak", "Israel", "Yordania"],
+    answer: "Israel"
+},
+{
+    question: "Apa itu bear market?",
+    choices: ["Pasar dengan tren harga naik", "Pasar dengan tren harga stabil", "Pasar dengan tren harga menurun", "Pasar khusus jual beli beruang"],
+    answer: "Pasar dengan tren harga menurun"
+},
+
+{
+    question: "Apa itu diversifikasi dalam investasi?",
+    choices: ["Investasi di satu aset untuk mengurangi risiko", "Pembagian investasi di berbagai aset untuk mengurangi risiko", "Investasi semua modal di saham", "Pembelian satu jenis obligasi saja"],
+    answer: "Pembagian investasi di berbagai aset untuk mengurangi risiko"
+},
+{
+    question: "Negara mana yang mata uangnya disebut Kuna?",
+    choices: ["Slovenia", "Kroasia", "Serbia", "Montenegro"],
+    answer: "Kroasia"
+},
+{
+    question: "Apa yang dimaksud dengan pajak langsung?",
+    choices: ["Pajak yang dibayar langsung ke pemerintah oleh konsumen", "Pajak yang dibebankan pada pembelian barang dan jasa", "Pajak yang dibayar melalui perantara", "Pajak atas pendapatan atau harta"],
+    answer: "Pajak yang dibayar langsung ke pemerintah oleh konsumen"
+},
+{
+    question: "Mata uang apa yang digunakan di Australia?",
+    choices: ["Dolar Australia", "Pound Australia", "Euro Australia", "Dolar"],
+    answer: "Dolar Australia"
+},
+{
+    question: "Apa itu nilai tukar mengambang?",
+    choices: ["Nilai tukar yang ditetapkan oleh pemerintah", "Nilai tukar yang ditentukan oleh pasar", "Nilai tukar tetap untuk semua mata uang", "Nilai tukar yang tidak pernah berubah"],
+    answer: "Nilai tukar yang ditentukan oleh pasar"
+},
+{
+    question: "Apa itu bailout?",
+    choices: ["Proses untuk menaikkan harga saham", "Bantuan finansial untuk mencegah kebangkrutan", "Pengenaan pajak baru oleh pemerintah", "Pembelian saham oleh perusahaan besar"],
+    answer: "Bantuan finansial untuk mencegah kebangkrutan"
+},
+{
+    question: "Negara manakah yang menggunakan Lira?",
+    choices: ["Yunani", "Turki", "Italia", "Spanyol"],
+    answer: "Turki"
+},
+{
+    question: "Apa yang dimaksud dengan pasar obligasi?",
+    choices: ["Pasar untuk jual beli mata uang", "Pasar untuk jual beli saham", "Pasar untuk jual beli utang", "Pasar untuk jual beli properti"],
+    answer: "Pasar untuk jual beli utang"
+},
+{
+    question: "Apa itu defisit perdagangan?",
+    choices: ["Ketika impor lebih besar dari ekspor", "Ketika ekspor lebih besar dari impor", "Ketika impor sama dengan ekspor", "Ketika ekspor dan impor tidak mempengaruhi ekonomi"],
+    answer: "Ketika impor lebih besar dari ekspor"
+},
+{
+    question: "Mata uang apa yang digunakan di Brasil?",
+    choices: ["Dolar Brasil", "Real", "Peso", "Euro"],
+    answer: "Real"
+},
+{
+    question: "Apa itu bank sentral?",
+    choices: ["Bank komersial terbesar di sebuah negara", "Lembaga yang mengatur uang beredar dan suku bunga", "Bank yang memberikan pinjaman tanpa bunga", "Bank khusus untuk pemerintah"],
+    answer: "Lembaga yang mengatur uang beredar dan suku bunga"
+},
+{
+    question: "Apa itu depresi ekonomi?",
+    choices: ["Penurunan ringan aktivitas ekonomi", "Penurunan tajam dan berkepanjangan dalam aktivitas ekonomi", "Kenaikan cepat dalam aktivitas ekonomi", "Stabilitas total dalam aktivitas ekonomi"],
+    answer: "Penurunan tajam dan berkepanjangan dalam aktivitas ekonomi"
+},
+{
+    question: "Negara mana yang mata uangnya disebut Rupiah?",
+    choices: ["Indonesia", "Malaysia", "Thailand", "Filipina"],
+    answer: "Indonesia"
+},
+{
+    question: "Apa yang dimaksud dengan inflasi deflationer?",
+    choices: ["Kenaikan umum harga-harga", "Penurunan umum harga-harga", "Stabilitas harga-harga", "Fluktuasi harga secara ekstrem"],
+    answer: "Penurunan umum harga-harga"
+},
+{
+    question: "Apa itu cryptocurrency?",
+    choices: ["Mata uang berbasis emas", "Mata uang digital", "Mata uang cetak", "Mata uang konvensional"],
+    answer: "Mata uang digital"
+},
+{
+    question: "Negara manakah yang menggunakan Franc CFA?",
+    choices: ["Maroko", "France", "Senegal", "Mesir"],
+    answer: "Senegal"
+},
+{
+    question: "Apa itu neraca perdagangan?",
+    choices: ["Nilai ekspor dikurangi impor", "Total utang negara", "Total nilai mata uang dicetak", "Jumlah produk domestik bruto"],
+    answer: "Nilai ekspor dikurangi impor"
+},
+{
+    question: "Mata uang apa yang digunakan di Rusia?",
+    choices: ["Yuan", "Rubel", "Dolar", "Euro"],
+    answer: "Rubel"
+},
+{
+    question: "Apa itu saham preferen?",
+    choices: ["Saham tanpa hak suara", "Saham dengan dividen tetap", "Saham yang dapat ditukar", "Saham biasa"],
+    answer: "Saham dengan dividen tetap"
+},
+{
+    question: "Siapa yang menetapkan kebijakan moneter di AS?",
+    choices: ["Kongres AS", "Presiden AS", "Federal Reserve", "Bank AS"],
+    answer: "Federal Reserve"
+}, 
+    {
+        question: "Sebutkan contoh uang yang pernah digunakan sebagai alat tukar sejarah!",
+        choices: ["Uang kertas dan kartu kredit", "Bitcoin dan Ethereum", "Emas dan perak", "Kartu debit dan cek"],
+        correctAnswer: "Emas dan perak"
+    },
+    {
+        question: "Sebutkan contoh uang kertas denominasi kecil di Indonesia!",
+        choices: ["Uang lima rupiah", "Uang seribu rupiah", "Uang seratus rupiah", "Uang lima puluh ribu rupiah"],
+        correctAnswer: "Uang seribu rupiah"
+    },
+    {
+        question: "Dalam menjaga kelancaran sistem pembayaran pemerintah membentuk suatu lembaga yang diberikan hak mengatur dan menjaga sistem pembayaran. Lembaga tersebut adalah …..",
+        choices: ["OJK", "Kementerian Keuangan", "Bank Indonesia", "LPS"],
+        correctAnswer: "Bank Indonesia"
+    },
+    {
+        question: "Kebijakan yang dilakukan bank central dalam istilah ekonomi disebut dengan kebijakan moneter yaitu kebijakan menjaga jumlah uang yang beredar di masyarakat. Salah satunya adalah dengan cara menaikkan atau menurunkan tingkat suku bunga yang berlaku di bank-bank umum. Kebijakan ini disebut dengan …..",
+        choices: ["Kebijakan fiskal", "Kebijakan diskonto", "Kebijakan perdagangan", "Kebijakan subsidi"],
+        correctAnswer: "Kebijakan diskonto"
+    },
+    {
+        question: "Uang yang kita gunakan sehari-hari adalah uang …..",
+        choices: ["Giral", "Kartal", "Kripto", "Virtual"],
+        correctAnswer: "Kartal"
+    },
+    {
+        question: "Suatu peristiwa yang terjadi pada krisis moneter yang terjadi tahun 1998 melonjaknya harga – harga kebutuhan pokok, investor asing takut menanamkan modalnya di Indonesia, dan kecenderungan orang menyimpan uang di bank sangat rendah. Kejadian tersebut sebenarnya merupakan dampak dari …..",
+        choices: ["Deflasi", "Inflasi", "Stagflasi", "Hiperinflasi"],
+        correctAnswer: "Inflasi"
+    },
+    {
+        question: "Benda yang diterima secara umum dapat digunakan sebagai alat tukar, dan dapat digunakan sebagai alat pembayaran, disebut …..",
+        choices: ["Barang", "Jasa", "Uang", "Saham"],
+        correctAnswer: "Uang"
+    },
+    {
+        question: "Apa nama mata uang dari Myanmar?",
+        choices: ["Kyat", "Baht", "Rupiah", "Dong"],
+        correctAnswer: "Kyat"
+    },
+    {
+        question: "Negara manakah yang menggunakan mata uang manat?",
+        choices: ["Kazakhstan", "Turkmenistan", "Azerbaijan", "Uzbekistan"],
+        correctAnswer: "Azerbaijan"
+    },
+    {
+        question: "Negara manakah yang menggunakan mata uang zloty?",
+        choices: ["Czech Republic", "Slovakia", "Polandia", "Hungaria"],
+        correctAnswer: "Polandia"
+       
+    }, 
+  {
+    question: "Dalam teori ekonomi, apa yang dimaksud dengan 'The Invisible Hand'?",
+    choices: [
+      "Intervensi pemerintah dalam pasar",
+      "Mekanisme pasar yang mengatur diri sendiri tanpa intervensi",
+      "Konsep dalam perdagangan internasional",
+      "Strategi investasi di pasar saham"
+    ],
+    correctAnswer: "Mekanisme pasar yang mengatur diri sendiri tanpa intervensi"
+  },
+  {
+    question: "Apa yang dimaksud dengan 'Phillips Curve' dalam ekonomi?",
+    choices: [
+      "Hubungan antara inflasi dan pengangguran",
+      "Kurva permintaan dan penawaran",
+      "Pengaruh pajak terhadap pertumbuhan ekonomi",
+      "Dinamika pasar modal internasional"
+    ],
+    correctAnswer: "Hubungan antara inflasi dan pengangguran"
+  },
+  {
+    question: "Dalam ekonomi, 'Pareto Efficiency' mengacu pada kondisi di mana...",
+    choices: [
+      "Setiap individu dalam ekonomi mencapai utilitas maksimum",
+      "Tidak mungkin membuat seseorang lebih baik tanpa membuat orang lain lebih buruk",
+      "Semua barang dan jasa didistribusikan secara merata",
+      "Pasar mencapai kondisi keseimbangan harga"
+    ],
+    correctAnswer: "Tidak mungkin membuat seseorang lebih baik tanpa membuat orang lain lebih buruk"
+  },
+  {
+    question: "Konsep 'Time Value of Money' paling tepat dijelaskan sebagai...",
+    choices: [
+      "Uang saat ini lebih berharga dibandingkan dengan jumlah uang yang sama di masa depan karena potensi penghasilan",
+      "Preferensi konsumen terhadap barang dan jasa sekarang dibandingkan nanti",
+      "Inflasi yang menurunkan nilai uang seiring waktu",
+      "Durasi pinjaman yang mempengaruhi tingkat bunga"
+    ],
+    correctAnswer: "Uang saat ini lebih berharga dibandingkan dengan jumlah uang yang sama di masa depan karena potensi penghasilan"
+  },
+  {
+    question: "Teorema 'Coase' dalam teori ekonomi menyatakan bahwa...",
+    choices: [
+      "Pasar akan gagal tanpa intervensi pemerintah",
+      "Jika ada biaya transaksi nol, sumber daya akan dialokasikan secara efisien terlepas dari alokasi hak properti awal",
+      "Pengangguran adalah hasil alami dari pasar yang efisien",
+      "Kebijakan moneter tidak berpengaruh pada output ekonomi"
+    ],
+    correctAnswer: "Jika ada biaya transaksi nol, sumber daya akan dialokasikan secara efisien terlepas dari alokasi hak properti awal"
+  },
+
+  {
+    question: "Dalam teori ekonomi, apa yang dimaksud dengan 'The Invisible Hand'?",
+    choices: [
+      "Intervensi pemerintah dalam pasar",
+      "Mekanisme pasar yang mengatur diri sendiri tanpa intervensi",
+      "Konsep dalam perdagangan internasional",
+      "Strategi investasi di pasar saham"
+    ],
+    correctAnswer: "Mekanisme pasar yang mengatur diri sendiri tanpa intervensi"
+  },
+  {
+    question: "Siapakah ekonom yang pertama kali memperkenalkan konsep 'komparatif keuntungan'?",
+    choices: [
+      "Adam Smith",
+      "David Ricardo",
+      "John Maynard Keynes",
+      "Milton Friedman"
+    ],
+    correctAnswer: "David Ricardo"
+  },
+  {
+    question: "Apa yang dimaksud dengan 'Phillips Curve' dalam ekonomi?",
+    choices: [
+      "Hubungan antara inflasi dan pengangguran",
+      "Kurva permintaan dan penawaran",
+      "Pengaruh pajak terhadap pertumbuhan ekonomi",
+      "Dinamika pasar modal internasional"
+    ],
+    correctAnswer: "Hubungan antara inflasi dan pengangguran"
+  },
+  {
+    question: "Dalam ekonomi, 'Pareto Efficiency' mengacu pada kondisi di mana...",
+    choices: [
+      "Setiap individu dalam ekonomi mencapai utilitas maksimum",
+      "Tidak mungkin membuat seseorang lebih baik tanpa membuat orang lain lebih buruk",
+      "Semua barang dan jasa didistribusikan secara merata",
+      "Pasar mencapai kondisi keseimbangan harga"
+    ],
+    correctAnswer: "Tidak mungkin membuat seseorang lebih baik tanpa membuat orang lain lebih buruk"
+  },
+  {
+    question: "Konsep 'Time Value of Money' paling tepat dijelaskan sebagai...",
+    choices: [
+      "Uang saat ini lebih berharga dibandingkan dengan jumlah uang yang sama di masa depan karena potensi penghasilan",
+      "Preferensi konsumen terhadap barang dan jasa sekarang dibandingkan nanti",
+      "Inflasi yang menurunkan nilai uang seiring waktu",
+      "Durasi pinjaman yang mempengaruhi tingkat bunga"
+    ],
+    correctAnswer: "Uang saat ini lebih berharga dibandingkan dengan jumlah uang yang sama di masa depan karena potensi penghasilan"
+  },
+  {
+    question: "Teorema 'Coase' dalam teori ekonomi menyatakan bahwa...",
+    choices: [
+      "Pasar akan gagal tanpa intervensi pemerintah",
+      "Jika ada biaya transaksi nol, sumber daya akan dialokasikan secara efisien terlepas dari alokasi hak properti awal",
+      "Pengangguran adalah hasil alami dari pasar yang efisien",
+      "Kebijakan moneter tidak berpengaruh pada output ekonomi"
+    ],
+    correctAnswer: "Jika ada biaya transaksi nol, sumber daya akan dialokasikan secara efisien terlepas dari alokasi hak properti awal"
+  },
+  {
+  question: "Apa yang dimaksud dengan 'fiscal drag' dalam konteks kebijakan fiskal?",
+  choices: [
+    "Pengurangan pengeluaran pemerintah untuk mengurangi defisit anggaran",
+    "Peningkatan otomatis dalam pendapatan pajak karena inflasi tanpa perubahan tarif pajak",
+    "Penggunaan pajak progresif untuk meredistribusi pendapatan",
+    "Strategi untuk mengurangi inflasi melalui peningkatan suku bunga"
+  ],
+  correctAnswer: "Peningkatan otomatis dalam pendapatan pajak karena inflasi tanpa perubahan tarif pajak"
+},
+{
+  question: "Dalam teori permainan, apa yang dimaksud dengan 'Nash Equilibrium'?",
+  choices: [
+    "Situasi di mana tidak ada pemain yang dapat meningkatkan keuntungannya dengan mengubah strateginya sendiri",
+    "Kondisi pasar di mana penawaran setara dengan permintaan",
+    "Situasi di mana semua pemain memilih strategi dominan mereka",
+    "Keadaan di mana terdapat kolusi antara pesaing untuk memaksimalkan keuntungan"
+  ],
+  correctAnswer: "Situasi di mana tidak ada pemain yang dapat meningkatkan keuntungannya dengan mengubah strateginya sendiri"
+},
+{
+  question: "Apa yang dimaksud dengan 'Liquidity Trap'?",
+  choices: [
+    "Situasi di mana kebijakan moneter menjadi tidak efektif karena suku bunga nominal mencapai nol",
+    "Kondisi pasar di mana likuiditas berlebih menyebabkan inflasi",
+    "Periode di mana terjadi penurunan tajam dalam permintaan pasar",
+    "Situasi di mana bank-bank tidak mau meminjamkan uang meskipun ada banyak likuiditas"
+  ],
+  correctAnswer: "Situasi di mana kebijakan moneter menjadi tidak efektif karena suku bunga nominal mencapai nol"
+},
+{
+  question: "Dalam ekonomi, apa fungsi dari 'Automatic Stabilizers'?",
+  choices: [
+    "Instrumen yang secara otomatis menyesuaikan suku bunga untuk mengendalikan inflasi",
+    "Mekanisme yang menyesuaikan pengeluaran dan pendapatan pemerintah untuk meredakan fluktuasi ekonomi",
+    "Sistem yang otomatis menyesuaikan nilai tukar mata uang",
+    "Alat yang mengendalikan pasokan uang tanpa intervensi bank sentral"
+  ],
+  correctAnswer: "Mekanisme yang menyesuaikan pengeluaran dan pendapatan pemerintah untuk meredakan fluktuasi ekonomi"
+},
+{
+  question: "Konsep 'Marginal Propensity to Consume' (MPC) paling baik dijelaskan sebagai...",
+  choices: [
+    "Persentase peningkatan konsumsi yang diakibatkan oleh peningkatan pendapatan",
+    "Kemiringan fungsi permintaan agregat dalam model makroekonomi",
+    "Proporsi pendapatan yang dihabiskan untuk tabungan",
+    "Rasio pendapatan yang diinvestasikan dalam pasar saham"
+  ],
+  correctAnswer: "Persentase peningkatan konsumsi yang diakibatkan oleh peningkatan pendapatan"
+},
+{
+  question: "Teori 'Real Business Cycle' (RBC) menyatakan bahwa fluktuasi ekonomi disebabkan oleh...",
+  choices: [
+    "Perubahan dalam kebijakan moneter",
+    "Intervensi pemerintah dalam ekonomi",
+    "Perubahan nyata dalam ekonomi seperti teknologi atau sumber daya",
+    "Spekulasi di pasar keuangan"
+  ],
+  correctAnswer: "Perubahan nyata dalam ekonomi seperti teknologi atau sumber daya"
+},
+{
+  question: "'Crowding Out Effect' terjadi ketika...",
+  choices: [
+    "Pengeluaran konsumen menggantikan investasi swasta karena peningkatan pengeluaran pemerintah",
+    "Investasi asing menggantikan investasi domestik",
+    "Peningkatan impor mengurangi permintaan untuk produk domestik",
+    "Pengeluaran pemerintah dalam pendidikan menggantikan investasi swasta dalam R&D"
+  ],
+  correctAnswer: "Pengeluaran konsumen menggantikan investasi swasta karena peningkatan pengeluaran pemerintah"
+}, 
+{
+  question: "Apa yang dimaksud dengan 'Tragedy of the Commons' dalam ekonomi?",
+  choices: [
+    "Teori yang menyatakan bahwa individu akan bertindak egois dalam pengelolaan sumber daya bersama",
+    "Konsep yang menjelaskan kegagalan pasar dalam mengatur sumber daya alam",
+    "Situasi di mana pasar mengalami keruntuhan karena ketidakmampuan pemerintah dalam mengatur kebijakan ekonomi",
+    "Kondisi di mana persaingan di pasar menghasilkan distribusi sumber daya yang tidak adil"
+  ],
+  correctAnswer: "Teori yang menyatakan bahwa individu akan bertindak egois dalam pengelolaan sumber daya bersama"
+},
+{
+  question: "Apa yang dimaksud dengan 'Heckscher-Ohlin Theory' dalam perdagangan internasional?",
+  choices: [
+    "Teori yang menjelaskan bahwa perbedaan dalam keunggulan komparatif mempengaruhi arah perdagangan",
+    "Konsep yang menyoroti pentingnya keberagaman sumber daya dalam pembentukan keunggulan kompetitif",
+    "Teori yang menjelaskan hubungan antara jumlah modal dan tenaga kerja dalam produksi",
+    "Konsep yang menggambarkan dampak teknologi dalam mengubah pola perdagangan internasional"
+  ],
+  correctAnswer: "Teori yang menjelaskan bahwa perbedaan dalam keunggulan komparatif mempengaruhi arah perdagangan"
+},
+{
+  question: "Apa yang dimaksud dengan 'Creative Destruction' dalam teori ekonomi?",
+  choices: [
+    "Proses di mana inovasi menghasilkan pertumbuhan ekonomi baru sementara menghancurkan industri lama",
+    "Konsep yang menjelaskan dampak positif teknologi terhadap pasar tenaga kerja",
+    "Teori yang menggambarkan bagaimana perusahaan dapat mencapai keunggulan kompetitif melalui diferensiasi produk",
+    "Situasi di mana perubahan kebijakan fiskal menyebabkan perlambatan pertumbuhan ekonomi"
+  ],
+  correctAnswer: "Proses di mana inovasi menghasilkan pertumbuhan ekonomi baru sementara menghancurkan industri lama"
+},
+{
+  question: "Apa yang dimaksud dengan 'Homo Economicus' dalam teori ekonomi?",
+  choices: [
+    "Model manusia dalam ekonomi yang mengasumsikan rasionalitas dan tujuan utama untuk memaksimalkan keuntungan pribadi",
+    "Istilah yang digunakan untuk menggambarkan keadaan di mana pasar bekerja secara efisien tanpa intervensi pemerintah",
+    "Teori yang menjelaskan bagaimana perilaku konsumen dipengaruhi oleh preferensi budaya",
+    "Model ekonomi yang menggambarkan bagaimana manusia secara alami mencari keseimbangan dalam konsumsi dan tabungan"
+  ],
+  correctAnswer: "Model manusia dalam ekonomi yang mengasumsikan rasionalitas dan tujuan utama untuk memaksimalkan keuntungan pribadi"
+},
+{
+  question: "Apa yang dimaksud dengan 'Pareto Efficiency' dalam teori kesejahteraan ekonomi?",
+  choices: [
+    "Situasi di mana keuntungan ekonomi terdistribusi secara merata di antara masyarakat",
+    "Konsep yang menjelaskan bahwa distribusi yang adil dalam masyarakat akan menghasilkan kesejahteraan yang maksimum",
+    "Kondisi di mana tidak ada yang bisa menjadi lebih baik tanpa membuat orang lain menjadi lebih buruk",
+    "Teori yang menunjukkan bahwa intervensi pemerintah dalam pasar selalu menghasilkan efisiensi ekonomi"
+  ],
+  correctAnswer: "Kondisi di mana tidak ada yang bisa menjadi lebih baik tanpa membuat orang lain menjadi lebih buruk"
+}, 
+{
+  question: "Mata uang apa yang digunakan di Jepang?",
+  choices: ["Yen", "Won", "Yuan", "Dolar"],
+  correctAnswer: "Yen"
+},
+{
+  question: "Apa itu inflasi?",
+  choices: [
+    "Penurunan nilai uang",
+    "Peningkatan harga barang dan jasa secara umum dan terus menerus",
+    "Peningkatan nilai mata uang",
+    "Penurunan harga barang secara drastis"
+  ],
+  correctAnswer: "Peningkatan harga barang dan jasa secara umum dan terus menerus"
+},
+{
+  question: "Apa yang dimaksud dengan PDB (Produk Domestik Bruto)?",
+  choices: [
+    "Total nilai ekspor suatu negara",
+    "Total nilai jual semua barang dan jasa yang dihasilkan dalam suatu negara",
+    "Total pendapatan per kapita suatu negara",
+    "Total hutang nasional suatu negara"
+  ],
+  correctAnswer: "Total nilai jual semua barang dan jasa yang dihasilkan dalam suatu negara"
+},
+{
+  question: "Siapa yang dikenal sebagai 'Bapak Ekonomi'?",
+  choices: ["John Maynard Keynes", "Adam Smith", "Milton Friedman", "David Ricardo"],
+  correctAnswer: "Adam Smith"
+},
+{
+  question: "Apa yang dimaksud dengan pasar monopoli?",
+  choices: [
+    "Pasar dengan banyak penjual dan pembeli",
+    "Pasar dengan satu penjual dan banyak pembeli",
+    "Pasar dengan beberapa penjual yang menguasai pasar",
+    "Pasar dengan persaingan sempurna"
+  ],
+  correctAnswer: "Pasar dengan satu penjual dan banyak pembeli"
+},
+{
+  question: "Apa itu bunga sederhana?",
+  choices: [
+    "Bunga yang diperoleh dari deposito berjangka",
+    "Bunga yang diperhitungkan hanya dari pokok pinjaman atau deposito",
+    "Bunga yang dihitung dari total pinjaman dan bunga sebelumnya",
+    "Bunga yang dihitung berdasarkan inflasi"
+  ],
+  correctAnswer: "Bunga yang diperhitungkan hanya dari pokok pinjaman atau deposito"
+},
+{
+  question: "Apa yang dimaksud dengan defisit anggaran?",
+  choices: [
+    "Ketika pemerintah menghabiskan lebih banyak daripada pajak yang diterima",
+    "Ketika pemerintah menerima lebih banyak pajak daripada pengeluaran",
+    "Ketika pemerintah memiliki surplus uang",
+    "Ketika pemerintah meminjam uang dari bank sentral"
+  ],
+  correctAnswer: "Ketika pemerintah menghabiskan lebih banyak daripada pajak yang diterima"
+},
+{
+  question: "Apa fungsi utama bank sentral?",
+  choices: [
+    "Memberikan pinjaman kepada pemerintah",
+    "Mengatur suplai uang dan menjaga stabilitas ekonomi",
+    "Memberikan pinjaman kepada masyarakat",
+    "Mengumpulkan pajak"
+  ],
+  correctAnswer: "Mengatur suplai uang dan menjaga stabilitas ekonomi"
+},
+{
+  question: "Apa itu kebijakan fiskal?",
+  choices: [
+    "Kebijakan yang berkaitan dengan regulasi uang dan kredit",
+    "Kebijakan pemerintah dalam pengelolaan anggaran untuk mempengaruhi ekonomi",
+    "Kebijakan yang berkaitan dengan perdagangan internasional",
+    "Kebijakan untuk mengatur harga pasar"
+  ],
+  correctAnswer: "Kebijakan pemerintah dalam pengelolaan anggaran untuk mempengaruhi ekonomi"
+},
+{
+  question: "Apa itu diversifikasi dalam investasi?",
+  choices: [
+    "Menyimpan semua investasi dalam satu aset",
+    "Menyebar investasi ke berbagai aset untuk mengurangi risiko",
+    "Memilih satu aset dengan return tertinggi",
+    "Investasi hanya di pasar saham"
+  ],
+  correctAnswer: "Menyebar investasi ke berbagai aset untuk mengurangi risiko"
+}, 
+{
+  question: "Berapa lama waktu yang dibutuhkan untuk membuat uang kertas $1 AS?",
+  choices: ["1 bulan", "6 bulan", "1 tahun", "2 minggu"],
+  correctAnswer: "2 minggu"
+},
+{
+  question: "Negara mana yang pertama kali mengenalkan pajak penghasilan?",
+  choices: ["Inggris", "Mesir Kuno", "Amerika Serikat", "Prancis"],
+  correctAnswer: "Inggris"
+},
+{
+  question: "Berapa jumlah total bahasa yang diakui secara resmi di India?",
+  choices: ["22", "18", "12", "30"],
+  correctAnswer: "22"
+},
+{
+  question: "Negara manakah yang memiliki lebih banyak danau daripada seluruh dunia digabungkan?",
+  choices: ["Kanada", "Rusia", "Finlandia", "Swedia"],
+  correctAnswer: "Kanada"
+},
+{
+  question: "Apa nama asli dari Monumen Stonehenge?",
+  choices: ["Circle Stones", "Druid Circles", "Giant's Dance", "Mystery Rings"],
+  correctAnswer: "Giant's Dance"
+},
+{
+  question: "Di kota mana sistem metro pertama di dunia dibangun?",
+  choices: ["London", "New York", "Paris", "Tokyo"],
+  correctAnswer: "London"
+},
+{
+  question: "Apa bahan dasar tinta yang digunakan dalam uang kertas modern?",
+  choices: ["Arang dan minyak", "Tinta berbasis air", "Tinta berbasis alkohol", "Pigmen dan plastik"],
+  correctAnswer: "Arang dan minyak"
+},
+{
+  question: "Tahun berapa Internet pertama kali diperkenalkan ke publik?",
+  choices: ["1983", "1991", "1971", "1969"],
+  correctAnswer: "1991"
+},
+{
+  question: "Apa yang diukur dengan Skala Scoville?",
+  choices: ["Kekuatan gempa bumi", "Kekuatan angin topan", "Kepedasan cabai", "Kecerahan bintang"],
+  correctAnswer: "Kepedasan cabai"
+},
+{
+  question: "Negara manakah yang memiliki lebih dari satu ibu kota?",
+  choices: ["Afrika Selatan", "Amerika Serikat", "Spanyol", "Australia"],
+  correctAnswer: "Afrika Selatan"
+}, 
+{
+  question: "Siapa yang menciptakan konsep PDB (Produk Domestik Bruto)?",
+  choices: ["Adam Smith", "John Maynard Keynes", "Simon Kuznets", "Milton Friedman"],
+  correctAnswer: "Simon Kuznets"
+},
+{
+  question: "Negara mana yang pertama kali menggunakan kertas sebagai uang?",
+  choices: ["Cina", "India", "Mesir", "Yunani"],
+  correctAnswer: "Cina"
+},
+{
+  question: "Berapa banyak 'Tiger Economies' di Asia?",
+  choices: ["4", "5", "6", "7"],
+  correctAnswer: "4"
+},
+{
+  question: "Apa istilah ekonomi untuk barang yang meningkat permintaannya saat harga naik?",
+  choices: ["Barang inferior", "Barang Giffen", "Barang mewah", "Barang normal"],
+  correctAnswer: "Barang Giffen"
+},
+{
+  question: "Di kota manakah Bursa Saham New York (NYSE) berlokasi?",
+  choices: ["Wall Street", "Times Square", "Central Park", "Statue of Liberty"],
+  correctAnswer: "Wall Street"
+},
+{
+  question: "Negara manakah yang memiliki cadangan minyak terbesar di dunia?",
+  choices: ["Arab Saudi", "Venezuela", "Rusia", "Amerika Serikat"],
+  correctAnswer: "Venezuela"
+},
+{
+  question: "Apa nama mata uang yang digunakan di dunia 'Game of Thrones'?",
+  choices: ["Dragons", "Dinars", "Credits", "Coins"],
+  correctAnswer: "Dragons"
+},
+{
+  question: "Apa nama teori yang menyatakan bahwa jumlah perdagangan antar negara tidak dipengaruhi oleh kekayaan relatif atau keseluruhan kekayaan?",
+  choices: ["Teori Keunggulan Komparatif", "Teori Gravitasi", "Teori Keseimbangan Umum", "Teori Nilai Tukar"],
+  correctAnswer: "Teori Gravitasi"
+},
+{
+  question: "Siapa ekonom yang pertama kali merumuskan konsep 'Invisible Hand'?",
+  choices: ["Adam Smith", "David Ricardo", "Alfred Marshall", "John Stuart Mill"],
+  correctAnswer: "Adam Smith"
+},
+{
+  question: "Negara manakah yang mencetak mata uang Euro?",
+  choices: ["Setiap negara anggota zona Euro", "Bank Sentral Eropa", "Jerman", "Prancis"],
+  correctAnswer: "Setiap negara anggota zona Euro"
+}, 
+{
+  question: "Kenapa Superman bisa terbang? Karena...",
+  choices: ["Punya sayap", "Pakai baju terbang", "Minum obat terbang", "Ada anginnya"],
+  correctAnswer: "Ada anginnya"
+},
+{
+  question: "Hewan apa yang paling lama hidupnya?",
+  choices: ["Kura-kura", "Ular", "Kecoak", "Plastik"],
+  correctAnswer: "Plastik"
+},
+{
+  question: "Apa bedanya sapi dengan sapi perah?",
+  choices: ["Warnanya", "Bentuknya", "Suaranya", "Sapi perah dipegang-pegang"],
+  correctAnswer: "Sapi perah dipegang-pegang"
+},
+{
+  question: "Buah apa yang tidak bisa dibuka?",
+  choices: ["Durian", "Pisang", "Rambutan", "Simpul"],
+  correctAnswer: "Simpul"
+},
+{
+  question: "Kenapa ayam kalo berkokok kepala nya diangkat?",
+  choices: ["Supaya lebih kencang", "Agar leher tidak pegal", "Biaya tidak mampu", "Supaya suaranya keluar"],
+  correctAnswer: "Supaya suaranya keluar"
+},
+{
+  question: "Kenapa orang menyelam pakai kacamata?",
+  choices: ["Agar ikan jelas", "Supaya mata tidak perih", "Agar tidak silau", "Takut dikenali ikan"],
+  correctAnswer: "Takut dikenali ikan"
+},
+{
+  question: "Mobil apa yang bikin kita sehat?",
+  choices: ["Mobil sport", "Mobil sedan", "Mobil ambulans", "Mobilan"],
+  correctAnswer: "Mobilan"
+},
+{
+  question: "Kota apa yang selalu ditinggal pergi?",
+  choices: ["Jakarta", "kota", "Medan", "Kotak"],
+  correctAnswer: "Kotak"
+},
+{
+  question: "Benda apa yang kalau dibeli tidak dipakai, kalau dipakai tidak dilihat?",
+  choices: ["Baju", "Sepatu", "Kacamata", "Peti mati"],
+  correctAnswer: "Peti mati"
+},
+{
+  question: "Pisang apa yang bikin sejuk?",
+  choices: ["Pisang dingin", "Pisang raja", "Pisang goreng", "Pisang kipas"],
+  correctAnswer: "Pisang kipas"
+}, 
+];
+
+
+     
+
+      let questions = [...originalQuestions];
+      let currentLevel = 1;
+      let score = 0;
+      let displayedQuestions = [];
+
+      function getRandomQuestion() {
+          if (questions.length === 0) {
+              questions = [...originalQuestions]; 
+              displayedQuestions = [];
+          }
+          const randomIndex = Math.floor(Math.random() * questions.length);
+          const selectedQuestion = questions.splice(randomIndex, 1)[0];
+          displayedQuestions.push(selectedQuestion);
+          return selectedQuestion;
+      }
+
+      function displayQuestion() {
+          if(currentLevel > 20) {
+              localStorage.setItem("finalScore", score);
+              window.location.href = 'halaman5.html';
+              return;
+          }
+
+          const questionObj = getRandomQuestion();
+          const questionEl = document.getElementById("question");
+          const choicesForm = document.getElementById("choicesForm");
+          questionEl.innerHTML = `Level ${currentLevel}: ${questionObj.question}`;
+
+          choicesForm.innerHTML = '';
+
+          questionObj.choices.forEach(choice => {
+              const label = document.createElement("label");
+              label.innerHTML = `<input type="radio" name="choice" value="${choice}"> ${choice}`;
+              choicesForm.appendChild(label);
+          });
+      }
+
+      function checkAnswer() {
+          const selectedChoice = document.querySelector('input[name="choice"]:checked');
+          if (!selectedChoice) return alert("Tolonglah Pilih 1 jawaban dulu");
+
+          const questionText = document.getElementById("question").textContent;
+          const correctAnswer = displayedQuestions.find(q => `Level ${currentLevel}: ${q.question}` === questionText)?.answer;
+
+          if (selectedChoice.value === correctAnswer) {
+              score += 5; 
+              currentLevel++;
+              displayQuestion();
+          } else {
+              alert(`Salah! Jawaban yang benar adalah "${correctAnswer}". Kamu kembali ke level 1 dengan score 0.`);
+              resetGame();
+          }
+      }
+
+      function skipLevel() {
+          currentLevel++;
+          if (currentLevel > 20) {
+              window.location.href = 'halaman5.html';
+          } else {
+              displayQuestion();
+          }
+      }
+
+      function resetGame() {
+          currentLevel = 1;
+          score = 0;
+          questions = [...originalQuestions];
+          displayedQuestions = [];
+          displayQuestion();
+      }
+
+      document.getElementById("submitBtn").addEventListener("click", function(event) {
+          event.preventDefault();
+          checkAnswer();
+      });
+
+      document.getElementById("skipBtn").addEventListener("click", function(event) {
+          event.preventDefault(); 
+          skipLevel();
+      });
+
+      window.onload = displayQuestion;
+    </script>
+</body>
+</html>
