@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sesi Hukuman</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url(background.png);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .wheel-container {
+            position: relative;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="wheel-container">
+        <canvas id="wheelCanvas" width="500" height="500"></canvas>
+        <button id="spinButton">Putar Roda!</button>
+        <button id="stopButton" style="display:none;">Hentikan Roda!</button>
+    </div>
+
+    <script>
+const canvas = document.getElementById('wheelCanvas');
+const ctx = canvas.getContext('2d');
+const spinButton = document.getElementById('spinButton');
+const stopButton = document.getElementById('stopButton');
+const wheelRadius = canvas.width / 2;
+let isSpinning = false;
+let currentAngle = 0;
+let animationFrameId;
+let startAngle = 0;
+let spinTime = 0;
+let spinTimeTotal = 0;
+
+const hukuman = ["Panggil 1 lawan jenis dengan imut ", "Beri 3 pantun", "Menyanyi lagu galau 1 menit", "Hukuman 4", "Hukuman 5", "Hukuman 6", "Hukuman 7", "Hukuman 8"];
+const colors = ['#E74C3C', '#3498DB', '#F1C40F', '#1ABC9C', '#9B59B6', '#34495E', '#E67E22', '#2ECC71'];
+
+function drawWheel() {
+    const slice = Math.PI * 2 / hukuman.length;
+  
+ctx.font = '13px Arial'; 
+ctx.shadowBlur = 20;
+ctx.shadowColor = "purple";
+
+
+ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'; 
+ctx.lineWidth = 2; 
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(wheelRadius, wheelRadius);
+    ctx.rotate(startAngle);
+
+    hukuman.forEach((h, index) => {
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, wheelRadius, slice * index, slice * (index + 1));
+        ctx.fillStyle = colors[index];
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.save();
+        ctx.rotate(slice * (index + 0.5));
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#fff";
+        ctx.fillText(h, wheelRadius - 10, 0);
+        ctx.restore();
+    });
+
+    ctx.restore();
+    drawArrow();
+}
+
+function drawArrow() {
+    ctx.fillStyle = 'red';
+    ctx.beginPath();
+    ctx.moveTo(wheelRadius, 5);
+    ctx.lineTo(wheelRadius + 20, 5);
+    ctx.lineTo(wheelRadius, 30);
+    ctx.lineTo(wheelRadius - 20, 5);
+    ctx.closePath();
+    ctx.fill();
+}
+
+function spinWheel() {
+    if (!isSpinning) {
+        isSpinning = true;
+        spinButton.style.display = "none";
+        stopButton.style.display = "inline-block";
+        spinTime = 0;
+        spinTimeTotal = Math.random() * 100 + 400 * 1000;
+        rotateWheel();
+    }
+}
+
+function rotateWheel() {
+    spinTime += 30;
+    if(spinTime >= spinTimeTotal) {
+        stopWheel();
+        return;
+    }
+    const spinAngleStart = Math.random() * 10 + 10;
+    startAngle += (spinAngleStart * Math.PI) / 180; 
+    drawWheel();
+    animationFrameId = requestAnimationFrame(rotateWheel);
+}
+
+function stopWheel() {
+    cancelAnimationFrame(animationFrameId);
+    const degrees = startAngle * 180 / Math.PI + 90;
+    const arcd = Math.PI * 2 / hukuman.length;
+    const index = Math.floor((360 - degrees % 360) / (360 / hukuman.length));
+    
+    alert(`Hukuman: ${hukuman[index]}. Segera lakukan hukumanmu!`);
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 10000);
+  
+    isSpinning = false;
+    spinButton.style.display = "inline-block";
+    stopButton.style.display = "none";
+    drawWheel(); 
+}
+
+
+spinButton.addEventListener('click', spinWheel);
+stopButton.addEventListener('click', stopWheel);
+
+drawWheel();
+</script>
+
+</body>
+</html>
